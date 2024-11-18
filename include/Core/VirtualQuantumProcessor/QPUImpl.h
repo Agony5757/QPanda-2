@@ -115,6 +115,17 @@ public:
                                      QStat &matrix, bool isConjugate)
                                      {return QError::qErrorNone;}
 
+    virtual QError DiagonalGate(Qnum& qubits, QStat& matrix,
+        bool isConjugate)
+    {
+        return QError::qErrorNone;
+    }
+    virtual QError controlDiagonalGate(Qnum& qubits, const Qnum& controls,
+        QStat& matrix, bool isConjugate)
+    {
+        return QError::qErrorNone;
+    }
+
     virtual QError process_noise(Qnum& qnum, QStat& matrix) = 0;
 
     virtual QError debug(std::shared_ptr<QPanda::AbstractQDebugNode> debugger) = 0;

@@ -1858,7 +1858,18 @@ QGate Toffoli(int qaddr0, int qaddr1, int target_qaddr);
 */
 QGate Toffoli(Qubit * control_fisrt, Qubit * control_second, Qubit * target);
 
-inline QGate copy_qgate(QuantumGate *  qgate_old, QVec qubit_vector)
+
+/**
+* @brief  Diagonal Gate
+* @ingroup Utilities
+* @param[in]  QVec input_qubits
+* @param[in]  const std::vector<complex_d>& diagonal elements
+* @return     QGate
+*/
+QGate Diagonal(const QVec& qubits, const std::vector<std::complex<double>> &diagonal_elements);
+
+
+inline QGate copy_qgate(QuantumGate *qgate_old, QVec qubit_vector)
 {
     if (nullptr == qgate_old)
     {

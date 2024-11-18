@@ -1102,6 +1102,27 @@ namespace QGATE_SPACE
         double m_theta{ PI/4 };
     };
 
+    // Diagonal gate
+    class QDiagonalGate :
+        public QuantumGate,
+        public DynamicCreator<QDiagonalGate, QuantumGate*>,
+        public DynamicCreator<QDiagonalGate, const QStat&>
+    {
+    protected:
+        QStat diagonal_elements;
+    public:
+        QDiagonalGate(QuantumGate* gate_old);
+        QDiagonalGate();
+        QDiagonalGate(const QDiagonalGate& oldDouble);
+        QDiagonalGate(const QStat& matrix);
+        virtual ~QDiagonalGate() {};
+
+        inline int getOperationNum() const
+        {
+            return -2;
+        }
+        void getMatrix(QStat&) const;
+    };
 }
 
 QPANDA_END

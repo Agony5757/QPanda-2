@@ -90,6 +90,8 @@ enum GateType {
 	ORACLE_GATE,
     CORACLE_GATE = 40,
 
+    DIAGONAL_GATE,
+
     ECHO_GATE,  /**< Only for 6 qubit online projects */
     BARRIER_GATE,  /**< Only for 6 qubit online projects */
 

@@ -1586,16 +1586,57 @@ QStat CPUImplQPU<data_t>::getQState()
 }
 
 template <typename data_t >
-QError CPUImplQPU<data_t>::DiagonalGate(Qnum & vQubit, QStat & matrix, bool isConjugate, double error_rate)
+QError CPUImplQPU<data_t>::controlDiagonalGate(const Qnum& vQubit, QStat& diagonal_elements, 
+    const Qnum& vControlBit, bool isConjugate)
 {
-    return qErrorNone;
+    size_t mask_control;
+    size_t mask_operation;
+
+    size_t matrix_sz = diagonal_elements.size();
+    size_t qubit_sz = vQubit.size();
+
+    if (matrix_sz != (1ull << qubit_sz))
+        return qParameterError;
+
+    for_each(vControlBit.begin(), vControlBit.end(), [&mask_control](size_t q) {
+        mask_control |= (1ull << q);
+    });
+    for_each(vQubit.begin(), vQubit.end(), [&mask_operation](size_t q) {
+        mask_operation |= (1ull << q);
+    });
+
+    for (size_t i = 0; i < m_state.size(); ++i)
+    {
+        size_t control_state = i & mask_control;
+        if (control_state != mask_control)
+            /* Satisfy all ones */
+            continue;
+
+        size_t operation_state = i & mask_operation;
+        if (isConjugate)
+            m_state[i] *= std::conj(diagonal_elements[operation_state]);
+        else
+            m_state[i] *= diagonal_elements[operation_state];
+    }
 }
 
 template <typename data_t >
-QError CPUImplQPU<data_t>::controlDiagonalGate(Qnum & vQubit, QStat & matrix, Qnum & vControlBit, bool isConjugate, double error_rate)
+QError CPUImplQPU<data_t>::DiagonalGate(const Qnum& vQubit, QStat& matrix, bool isConjugate)
 {
-    return qErrorNone;
+    return controlDiagonalGate(vQubit, matrix, {}, isConjugate);
 }
+//
+//template <typename data_t >
+//QError CPUImplQPU<data_t>::DiagonalGate(Qnum & vQubit, QStat & matrix, bool isConjugate, double error_rate)
+//{
+//    return DiagonalGate(vQubit, matrix, {}, isConjugate);
+//}
+
+//template <typename data_t >
+//QError CPUImplQPU<data_t>::controlDiagonalGate(Qnum & vQubit, QStat & matrix, Qnum & vControlBit, bool isConjugate, double error_rate)
+//{
+//    return DiagonalGate(vQubit, matrix, vControlBit, isConjugate);
+//}
 
 template <typename data_t >
 QError CPUImplQPU<data_t>::OracleGate(Qnum &qubits, QStat &matrix, bool is_dagger)

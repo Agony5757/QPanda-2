@@ -132,10 +132,12 @@ public:
     QError controlunitaryDoubleQubitGate(size_t qn_0, size_t qn_1, Qnum& controls,
         QStat& matrix, bool is_dagger,
         GateType);
-    QError DiagonalGate(Qnum& vQubit, QStat & matrix,
-        bool isConjugate, double error_rate);
-    QError controlDiagonalGate(Qnum& vQubit, QStat & matrix, Qnum& vControlBit,
-        bool isConjugate, double error_rate);
+    QError controlDiagonalGate(const Qnum& vqubit, QStat& diagonal_elements, const Qnum& vControlBit, bool isConjugate);
+    QError DiagonalGate(const Qnum& vqubit, QStat& diagonal_elements, bool isConjugate);
+    //QError DiagonalGate(Qnum& vQubit, QStat & matrix,
+    //    bool isConjugate, double error_rate);
+    //QError controlDiagonalGate(Qnum& vQubit, QStat & matrix, Qnum& vControlBit,
+    //    bool isConjugate, double error_rate);
 
     QError OracleGate(Qnum& qubits, QStat &matrix,
                       bool is_dagger);

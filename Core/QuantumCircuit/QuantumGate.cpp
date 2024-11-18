@@ -936,3 +936,50 @@ MS::MS(const MS & toCopy)
     this->gate_matrix = toCopy.gate_matrix;
     gate_type = GateType::MS_GATE;
 }
+
+QDiagonalGate::QDiagonalGate()
+{
+    gate_type = GateType::DIAGONAL_GATE;
+    operation_num = 0;
+    diagonal_elements.push_back(1);
+}
+
+QDiagonalGate::QDiagonalGate(QuantumGate* qgate_old)
+{
+    if (nullptr == qgate_old)
+    {
+        QCERR("Parameter qgate_old error");
+        throw invalid_argument("Parameter qgate_old error");
+    }
+
+    auto gate_ptr_old = static_cast<QDiagonalGate*>(qgate_old);
+    if (nullptr == gate_ptr_old)
+    {
+        QCERR("Static cast fail");
+        throw invalid_argument("Static cast fail");
+    }
+
+    gate_type = gate_ptr_old->gate_type;
+    diagonal_elements = gate_ptr_old->diagonal_elements;
+    operation_num = gate_ptr_old->operation_num;
+}
+
+QDiagonalGate::QDiagonalGate(const QStat& matrix)
+{
+    size_t matrix_sz = matrix.size();
+    size_t qubit_sz = (size_t)log2(matrix_sz);
+    if ((1ull << qubit_sz) != matrix_sz)
+    {
+        QCERR("Parameter matrix size error");
+        throw invalid_argument("Parameter matrix size error");
+    }
+
+    gate_type = GateType::DIAGONAL_GATE;
+    diagonal_elements = matrix;
+    operation_num = qubit_sz;
+}
+
+void QDiagonalGate::getMatrix(QStat&) const
+{
+    throw invalid_argument("Unsupported getMatrix for Diagonal gate.");
+}

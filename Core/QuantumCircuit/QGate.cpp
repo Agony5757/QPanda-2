@@ -577,6 +577,45 @@ void QGateParseDoubleBit(QuantumGate* qgate,
     }
 }
 
+void QGateParseDiagonal(QuantumGate* qgate,
+    QVec& qubit_vector,
+    QPUImpl* qgates,
+    bool is_dagger,
+    QVec& control_qubit_vector,
+    GateType type)
+{
+    if (nullptr == qgate)
+    {
+        QCERR("param error");
+        throw invalid_argument("param error");
+    }
+
+    QStat matrix;
+    qgate->getMatrix(matrix);
+
+    Qnum targets(qubit_vector.size());
+    for (size_t i = 0; i < qubit_vector.size(); i++)
+    {
+        targets[i] = qubit_vector[i]->get_phy_addr();
+    }
+
+    if (control_qubit_vector.size() == 0)
+    {
+        qgates->DiagonalGate(targets, matrix, is_dagger);
+    }
+    else
+    {
+        vector<size_t> controls(control_qubit_vector.size());
+        for (size_t i = 0; i < control_qubit_vector.size(); i++)
+        {
+            controls[i] = control_qubit_vector[i]->get_phy_addr();
+        }
+
+        controls.insert(controls.end(), targets.begin(), targets.end());
+        qgates->controlDiagonalGate(targets, controls, matrix, is_dagger);
+    }
+}
+
 void QGateParseOracleBit(QuantumGate* qgate,
     QVec& qubit_vector,
     QPUImpl* qgates,
@@ -630,6 +669,7 @@ insertQGateMapHelper_##FunctionName _G_insertQGateHelper##FunctionName(BitCount,
 REGISTER_QGATE_PARSE(1, QGateParseSingleBit);
 REGISTER_QGATE_PARSE(2, QGateParseDoubleBit);
 REGISTER_QGATE_PARSE(-1, QGateParseOracleBit);
+REGISTER_QGATE_PARSE(-2, QGateParseDiagonal);
 
 /*Singl Gate*/
 QGate QPanda::I(Qubit* qubit)
@@ -3007,4 +3047,20 @@ QCircuit QPanda::MS(const std::vector<int>& control_qaddrs, const std::vector<in
     }
 
     return cir;
+}
+
+
+QGate QPanda::Diagonal(const QVec& qubits, const std::vector<std::complex<double>>& diagonal_elements)
+{
+    size_t diagonal_sz = diagonal_elements.size();
+    size_t qubit_sz = qubits.size();
+    
+    if ((1ull << qubit_sz) != diagonal_sz)
+    {
+        QCERR("qubit_vector does not match diagonal size");
+        throw invalid_argument("qubit_vector does not match diagonal size");
+    }
+
+    string name = "QDiagonalGate";
+    return _gs_pGateNodeFactory->getGateNode(name, qubits, diagonal_elements);
 }
