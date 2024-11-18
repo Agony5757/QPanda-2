@@ -2484,6 +2484,23 @@ PYBIND11_MODULE(pyQPanda, m)
         py::return_value_policy::automatic
     );
 
+    /* Added by Agony5757 on 2024/11/18 */
+    m.def("Diagonal",
+        py::overload_cast<const QVec&, const QStat &>(&Diagonal),
+        py::arg("qubit"),
+        py::arg("matrix"),
+        "Create a Diagonal gate.\n"
+        "\n"
+        "Args:\n"
+        "    qubit (Qubit *): The qubit to be diagonalized.\n"
+        "\n"
+        "    matrix (QStat &): The diagonal matrix.\n"
+        "\n"
+        "Returns:\n"
+        "    A Diagonal node representing the operation.\n",
+        py::return_value_policy::automatic
+    );
+
     TempHelper_QDouble<QStat &>::export_doubleBitGate(m);
 
     //---------------------------------------------------------------------------------------------------------------------

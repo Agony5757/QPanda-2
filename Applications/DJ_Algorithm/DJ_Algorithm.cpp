@@ -39,20 +39,21 @@ void print_qstate(QStat& qstate)
 void diagonal_test()
 {
 	auto qvm = initQuantumMachine(QMachineType::CPU);
-	auto qvec = qAllocMany(2);
-	auto cvec = cAllocMany(2);
-	std::vector<std::complex<double>> elements(4, 1.0);
+	auto qvec = qAllocMany(8);
+	auto cvec = cAllocMany(8);
+	std::vector<std::complex<double>> elements(1<<8, 1.0);
 	elements[0] = -1;
+	elements[2] = -1;
+	elements[3] = -1;
+	elements[7] = -1;
+	elements[21] = -1;
 	auto prog = QProg();
-	prog << H(qvec[0]);
-	prog << H(qvec[1]);
+	prog << H(qvec);
 	prog << Diagonal(qvec, elements);
 
 	//prog << H(qvec[1]);
 	// prog << MeasureAll(qvec, cvec);
 	std::map<string, bool> result = qvm ->directlyRun(prog);
-
-
 
 	{
 		QStat qstate = qvm->getQState();
