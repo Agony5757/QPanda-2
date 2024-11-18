@@ -11,4 +11,4 @@ except ImportError:
     warnings.warn("QCloudMachine could not be imported. Some features might not be available.", ImportWarning)
 
 from .QCloudPlot import *
-from .PilotOSMachine import *
+# from .PilotOSMachine import *
