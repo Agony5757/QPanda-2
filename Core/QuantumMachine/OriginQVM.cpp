@@ -865,6 +865,11 @@ void  QVM::_fusion_gate(QProg& src_prog, const int fusion_bit)
             continue;
         }
 
+		/* Added by Agony5757 2024.11.18 */
+		/* avoid fusion for diagonal gate */
+		if (gate_node->getQGate()->getGateType() == GateType::DIAGONAL_GATE)
+			continue;
+
         QVec qubit_vec;
         gate_node->getQuBitVector(qubit_vec);
         if (qubit_vec.size() != fusion_bit) {

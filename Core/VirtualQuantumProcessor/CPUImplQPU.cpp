@@ -1589,8 +1589,8 @@ template <typename data_t >
 QError CPUImplQPU<data_t>::controlDiagonalGate(const Qnum& vQubit, QStat& diagonal_elements, 
     const Qnum& vControlBit, bool isConjugate)
 {
-    size_t mask_control;
-    size_t mask_operation;
+    size_t mask_control = 0;
+    size_t mask_operation = 0;
 
     size_t matrix_sz = diagonal_elements.size();
     size_t qubit_sz = vQubit.size();

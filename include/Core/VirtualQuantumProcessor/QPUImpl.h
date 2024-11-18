@@ -115,15 +115,15 @@ public:
                                      QStat &matrix, bool isConjugate)
                                      {return QError::qErrorNone;}
 
-    virtual QError DiagonalGate(Qnum& qubits, QStat& matrix,
+    virtual QError DiagonalGate(const Qnum& qubits, QStat& matrix,
         bool isConjugate)
     {
-        return QError::qErrorNone;
+        return QError::undefineError;
     }
-    virtual QError controlDiagonalGate(Qnum& qubits, const Qnum& controls,
-        QStat& matrix, bool isConjugate)
+    virtual QError controlDiagonalGate(const Qnum& qubits,
+         QStat& matrix, const Qnum& controls, bool isConjugate)
     {
-        return QError::qErrorNone;
+        return QError::undefineError;
     }
 
     virtual QError process_noise(Qnum& qnum, QStat& matrix) = 0;

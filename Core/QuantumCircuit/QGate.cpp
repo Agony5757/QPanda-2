@@ -612,7 +612,7 @@ void QGateParseDiagonal(QuantumGate* qgate,
         }
 
         controls.insert(controls.end(), targets.begin(), targets.end());
-        qgates->controlDiagonalGate(targets, controls, matrix, is_dagger);
+        qgates->controlDiagonalGate(targets, matrix, controls, is_dagger);
     }
 }
 

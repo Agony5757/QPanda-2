@@ -940,7 +940,7 @@ MS::MS(const MS & toCopy)
 QDiagonalGate::QDiagonalGate()
 {
     gate_type = GateType::DIAGONAL_GATE;
-    operation_num = 0;
+    operation_num = -2;
     diagonal_elements.push_back(1);
 }
 
@@ -961,7 +961,7 @@ QDiagonalGate::QDiagonalGate(QuantumGate* qgate_old)
 
     gate_type = gate_ptr_old->gate_type;
     diagonal_elements = gate_ptr_old->diagonal_elements;
-    operation_num = gate_ptr_old->operation_num;
+    operation_num = -2;
 }
 
 QDiagonalGate::QDiagonalGate(const QStat& matrix)
@@ -976,10 +976,10 @@ QDiagonalGate::QDiagonalGate(const QStat& matrix)
 
     gate_type = GateType::DIAGONAL_GATE;
     diagonal_elements = matrix;
-    operation_num = qubit_sz;
+    operation_num = -2;
 }
 
-void QDiagonalGate::getMatrix(QStat&) const
+void QDiagonalGate::getMatrix(QStat& matrix) const
 {
-    throw invalid_argument("Unsupported getMatrix for Diagonal gate.");
+    matrix = diagonal_elements;
 }
